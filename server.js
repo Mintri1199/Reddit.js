@@ -7,16 +7,32 @@ const exphbs = require('express-handlebars').create({
     extname: 'hbs'
 });
 
+// Database
+const database = require('./data/reddit-db')
+
+// Middleware
+const bodyParser = require('body-parser')
+const expressValidator = require('express-validator')
+
+// Constrollers
+const posts = require('./controllers/posts.js')
+
+// Models
+const Post = require('./models/post')
+
+// Middleware initialization
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(expressValidator())
 
 // Setting handlebars as the engine 
 app.engine('hbs', exphbs.engine)
 app.set('view engine', 'hbs')
 
+// Access controllers & database
+app.use(posts)
 
-app.get('/' , (req, res) => {
-    // res.send('hello');
-    res.render('test')
-});
+
 
 
 app.listen(3000, function(){
