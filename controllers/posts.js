@@ -2,10 +2,15 @@ const app = require('express')()
 const Post =  require('../models/post')
 
 
-// index
+// Post index
 app.get('/' , (req, res) => {
-    // res.send('hello');
-    res.render('test')
+    Post.find({})
+    .then(posts => {
+        res.render('post-index', { posts})
+    })
+    .catch(err => {
+        console.log(err.message);
+    })
 });
 
 // Get
