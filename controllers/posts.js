@@ -13,6 +13,18 @@ app.get('/' , (req, res) => {
     })
 });
 
+// Post Show
+app.get('/posts/:id', (req, res) => {
+    // Look up the post
+    Post.findById(req.params.id)
+    .then(post => {
+        res.render('posts-show', { post })
+    })
+    .catch(err => {
+        console.log(err.message);
+    })
+})
+
 // Get
 app.get('/posts/new', (req, res) => {
     res.render('post-new')
