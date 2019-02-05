@@ -6,7 +6,8 @@ const postSchema = new Schema({
     updatedAt: { type: Date },
     title: {type: String, require: true},
     url: {type: String, require: true},
-    summary: {type: String, require: true}
+    summary: {type: String, require: true},
+    subreddit: {type: String, required: true}
 })
 
 postSchema.pre('save', function(next){

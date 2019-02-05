@@ -13,6 +13,11 @@ app.get('/' , (req, res) => {
     })
 });
 
+// Get
+app.get('/posts/new', (req, res) => {
+    res.render('post-new')
+})
+
 // Post Show
 app.get('/posts/:id', (req, res) => {
     // Look up the post
@@ -25,11 +30,6 @@ app.get('/posts/:id', (req, res) => {
     })
 })
 
-// Get
-app.get('/posts/new', (req, res) => {
-    res.render('post-new')
-})
-
 // Create
 app.post('/posts/new', (req, res) => {
     console.log(req.body);
@@ -39,6 +39,19 @@ app.post('/posts/new', (req, res) => {
     post.save((err, body) => {
         return res.redirect(`/`)
     })
+})
+
+// Subreddit 
+app.get("/n/:subreddit", function (req, res) {
+    Post.find({ subreddit: req.params.subreddit })
+        .then(posts => {
+            res.render('post-index', {posts})
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
+
+    
 })
 
 module.exports = app  
