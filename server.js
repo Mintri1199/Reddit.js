@@ -16,9 +16,11 @@ const expressValidator = require('express-validator')
 
 // Constrollers
 const posts = require('./controllers/posts.js')
+const comments = require('./controllers/comments.js')
 
 // Models
 const Post = require('./models/post')
+const Comment = require('./models/comment')
 
 // Middleware initialization
 app.use(bodyParser.json())
@@ -31,7 +33,7 @@ app.set('view engine', 'hbs')
 
 // Access controllers & database
 app.use(posts)
-
+app.use(comments)
 
 
 

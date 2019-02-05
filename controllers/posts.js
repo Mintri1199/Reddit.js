@@ -22,6 +22,7 @@ app.get('/posts/new', (req, res) => {
 app.get('/posts/:id', (req, res) => {
     // Look up the post
     Post.findById(req.params.id)
+    .populate('comments')
     .then(post => {
         res.render('posts-show', { post })
     })
@@ -49,6 +50,7 @@ app.get("/n/:subreddit", function (req, res) {
         })
         .catch(err => {
             console.log(err.message);
+
         })
 
     
