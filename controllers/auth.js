@@ -31,4 +31,42 @@ app.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
+ // LOGIN FORM
+ app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login', (req, res) => {
+    const username = req.body.username
+    const password = req.body.password
+
+    // Find the username
+    User.findOne({username}, "username password")
+        .then(user => {
+            // User not found 
+            if (!user) {
+                return res.status(401).send({message: "Wrong Username or Password"})
+            }
+            // Check of password 
+            user.comparePassword(password, (err, isMatch) => {
+                //if not Match
+                if (!isMatch){
+                    return res.status(401).send({message: "Wrong Username or Password"})
+                }
+
+                // Create token
+                const token = jwt.sign({_id: user._id, username: username}, process.env.SECRET, {expiresIn: "60 days"})
+
+                // Set a cookie to redirect to root
+                res.cookie("nToken", token, {maxAge: 90000, httpOnly: true})
+                res.redirect("/")
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+})
+
+
+
 module.exports = app 
