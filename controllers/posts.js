@@ -4,9 +4,11 @@ const Post =  require('../models/post')
 
 // Post index
 app.get('/' , (req, res) => {
+    var currentUser = req.user
+
     Post.find({})
     .then(posts => {
-        res.render('post-index', { posts})
+        res.render('post-index', { posts, currentUser })
     })
     .catch(err => {
         console.log(err.message);
@@ -33,13 +35,17 @@ app.get('/posts/:id', (req, res) => {
 
 // Create
 app.post('/posts/new', (req, res) => {
-    console.log(req.body);
+    if (req.user) {
+        var post = new Post(req.body)
     
-    const post = new Post(req.body)
+        post.save((err, body) => {
+            return res.redirect(`/`)
+        })
+    } else {
+        return res.status(401) // UNAURTHORIZE
+    }
     
-    post.save((err, body) => {
-        return res.redirect(`/`)
-    })
+    
 })
 
 // Subreddit 

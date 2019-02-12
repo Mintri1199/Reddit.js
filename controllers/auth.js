@@ -15,7 +15,7 @@ app.post("/sign-up", (req, res) => {
     user
     .save()
     .then(user => {
-        var token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, {expiresIn: "60 days"} )
+        var token = jwt.sign({ _id: user._id, username: user.username }, secret, {expiresIn: "60 days"} )
         res.cookie('nToken', token, { maxAge: 90000, httpOnly: true } )
         res.redirect('/')
     })

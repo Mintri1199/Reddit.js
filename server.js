@@ -34,6 +34,23 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(expressValidator())
 app.use(cookieParser())
 
+// Custom Middleware
+var checkAuth = (req, res, next) => {
+    console.log("Checking authorization");
+    if (typeof req.cookies.nToken === "undefine" || req.cookies.nToken === null) {
+        req.user = null
+    } else {
+        
+        let token = req.cookies.nToken
+        console.log(token);
+        
+        var decodedToken = jwt.decode(token, {complete: true} || {})
+        req.user = decodedToken.payload 
+    }
+    next()
+}
+app.use(checkAuth)
+
 // Setting handlebars as the engine 
 app.engine('hbs', exphbs.engine)
 app.set('view engine', 'hbs')
@@ -42,6 +59,7 @@ app.set('view engine', 'hbs')
 app.use(posts)
 app.use(comments)
 app.use(auth)
+
 
 
 app.listen(3000, function(){
