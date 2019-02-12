@@ -27,6 +27,8 @@ app.post("/sign-up", (req, res) => {
 
 // LOGOUT 
 app.get('/logout', (req, res) => {
+    console.log("clearing cookies");
+    
     res.clearCookie('nToken')
     res.redirect('/')
 })

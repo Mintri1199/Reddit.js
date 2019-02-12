@@ -37,7 +37,7 @@ app.use(cookieParser())
 // Custom Middleware
 var checkAuth = (req, res, next) => {
     console.log("Checking authorization");
-    if (typeof req.cookies.nToken === "undefine" || req.cookies.nToken === null) {
+    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
         req.user = null
     } else {
         
@@ -45,6 +45,8 @@ var checkAuth = (req, res, next) => {
         console.log(token);
         
         var decodedToken = jwt.decode(token, {complete: true} || {})
+        console.log(decodedToken);
+        
         req.user = decodedToken.payload 
     }
     next()
