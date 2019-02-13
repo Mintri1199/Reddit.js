@@ -9,7 +9,9 @@
             </div>
         </form>
         {{#each post.comments}}
+            <div>{{this.author.username}}</div>
             <p>{{this.content}}</p>
+            
         {{/each}}
     </div>
     
