@@ -6,19 +6,38 @@ const expect = chai.expect
 // Import the Post model from our models folder
 // We can use it in our test
 const Post = require('../models/post')
+const User = require('../models/user')
 const server = require('../server')
-
+const agent = chai.request.agent(app)
 chai.should()
 chai.use(chaiHttp)
 
 describe('Post', function () {
-    const agent = chai.request.agent(server)
     // Post that we'll use for testing purposes
     const newPost = {
         title: "post title",
         url: 'https://www.google.com',
         summary: 'post summary' 
     }
+
+    const user = {
+        username: "posttest",
+        password: "password"
+    }
+
+    before(function(done) {
+        agent
+            .post('/sign-up')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(user)
+            .then(function(res) {
+                done()
+            })
+            .catch(function(err) {
+                done(err)
+            })
+    }) 
+
     it('should create with valid attributes at POST /post/new', function (done) {
         Post.estimatedDocumentCount()
         .then(function(initialDocCount) {
@@ -37,7 +56,7 @@ describe('Post', function () {
                             expect(res).to.have.status(200)
                             // Check that the database has one more post in it 
                             expect(newDocCount).to.be.equal(initialDocCount + 1)
-                            done()
+                            return done()
                         })
                         .catch(function(err){
                             done(err)
@@ -51,8 +70,22 @@ describe('Post', function () {
             done(err)
         })
     })
-
-    after(function() {
-        Post.findByIdAndDelete(newPost)
-    })
+    after(function (done) {
+        Post.findOneAndDelete(newPost)
+        .then(function (res) {
+            agent.close()     
+            User.findOneAndDelete({
+                username: user.username
+            })
+            .then(function (res) {
+                  done()
+              })
+            .catch(function (err) {
+                  done(err);
+              });
+        })
+        .catch(function (err) {
+            done(err);
+        });
+    });
 })
