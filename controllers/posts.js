@@ -42,7 +42,9 @@ app.post('/posts/new', (req, res) => {
     if (req.user) {
         var post = new Post(req.body)
         post.author = req.user._id
-
+        post.upVotes = []
+        post.downVotes = []
+        post.voteScore = 0
         post
         .save()
         .then(post => {
@@ -73,5 +75,30 @@ app.get("/n/:subreddit", function (req, res) {
             console.log(err.message);
         })
 })
+
+app.put("/posts/:id/vote-up", function(req, res) {
+    Post.findById(req.params.id).exec(function(err, post) {
+        post.upVotes.push(req.user._id);
+        post.voteScore = post.voteScore + 1;
+        post.save();
+        res.status(200);
+    }).catch(err => {
+        console.log(err.message);
+        
+    })
+});
+  
+app.put("/posts/:id/vote-down", function(req, res) {
+    Post.findById(req.params.id).exec(function(err, post) {
+        post.downVotes.push(req.user._id);
+        post.voteScore = post.voteScore - 1;
+        post.save();
+        res.status(200);
+    })
+    .catch(err => {
+        console.log(err.message);
+        
+    })
+});
 
 module.exports = app  

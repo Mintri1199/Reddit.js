@@ -11,8 +11,10 @@ const postSchema = new Schema({
     summary: {type: String, require: true},
     subreddit: {type: String, required: true},
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-    author: { type: Schema.Types.ObjectId, require: true , ref: "User"}
-
+    author: { type: Schema.Types.ObjectId, require: true , ref: "User"},
+    upVotes : [{ type: Schema.Types.ObjectId, ref: "User"}],
+    downVotes : [{ type: Schema.Types.ObjectId, ref: "User"}],
+    voteScore : {type: Number}
 })
 
 postSchema.pre('save', function(next){
