@@ -28,14 +28,12 @@ app.get('/posts/new', (req, res) => {
 app.get('/posts/:id', (req, res) => {
     var currentUser = req.user;
     // Look up the post
-    Post.findById(req.params.id).populate('comments').populate('author')
-    .then(post => {
-        console.log(post);
-        
-        res.render('posts-show', { post, currentUser })
-    })
-    .catch(err => {
-        console.log(err.message);
+    Post.findById(req.params.id).populate('comments').populate('author').lean()
+        .then(post => {
+            res.render('posts-show', { post, currentUser })
+        })
+        .catch(err => {
+            console.log(err);
     })
 })
 
@@ -67,13 +65,12 @@ app.post('/posts/new', (req, res) => {
 // Subreddit 
 app.get("/n/:subreddit", function (req, res) {
     var currentUser = req.user;
-    Post.find({ subreddit: req.params.subreddit })
+    Post.find({ subreddit: req.params.subreddit }).lean()
         .then(posts => {
             res.render('post-index', {posts, currentUser})
         })
         .catch(err => {
             console.log(err.message);
-
         })
 })
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-
+const Populate = require('../util/autopopulate')
 
 
 const postSchema = new Schema({
@@ -26,5 +26,7 @@ postSchema.pre('save', function(next){
     
     next()
 })
+
+postSchema.pre('findOne', Populate('author')).pre('find', Populate('author'))
 
 module.exports = mongoose.model("Post", postSchema)
