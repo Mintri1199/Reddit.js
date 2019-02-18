@@ -9,9 +9,7 @@
             </div>
         </form>
         {{#each post.comments}}
-            <div>{{this.author.username}}</div>
-            <p>{{this.content}}</p>
-            
+             {{> comment comment=this postId=../post._id}}
         {{/each}}
     </div>
     

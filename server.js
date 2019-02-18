@@ -22,11 +22,14 @@ const cookieParser = require('cookie-parser')
 const posts = require('./controllers/posts.js')
 const comments = require('./controllers/comments.js')
 const auth = require("./controllers/auth")
-
+const replies = require('./controllers/replies')
 
 // Models
 const Post = require('./models/post')
 const Comment = require('./models/comment')
+
+// setup express to server static files
+app.use("/public", express.static("public"))
 
 // Use Middleware 
 app.use(bodyParser.json())
@@ -59,7 +62,7 @@ app.set('view engine', 'hbs')
 app.use(posts)
 app.use(comments)
 app.use(auth)
-
+app.use(replies)
 
 
 app.listen(3000, function(){

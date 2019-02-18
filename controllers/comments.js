@@ -30,6 +30,7 @@ app.post('/posts/:postId/comments', function(req, res) {
 })
 
 
+
 // Create comment
 // app.post('/posts/:postId/comments', async function (req, res) { 
 //     if(req.user) {
